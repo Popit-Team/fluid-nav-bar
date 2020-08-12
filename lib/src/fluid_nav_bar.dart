@@ -32,6 +32,9 @@ class FluidNavBar extends StatefulWidget {
   /// The list of icons to display
   final List<FluidNavBarIcon> icons;
 
+  /// Sets the initial selected icon
+  final int initialIndex;
+
   /// A callback called when an icon has been tapped with its index
   final FluidNavBarChangeCallback onChange;
 
@@ -56,6 +59,7 @@ class FluidNavBar extends StatefulWidget {
 
   FluidNavBar({Key key,
     @required this.icons,
+    this.initialIndex = 0,
     this.onChange,
     this.style,
     this.animationFactor = 1.0,
@@ -66,14 +70,14 @@ class FluidNavBar extends StatefulWidget {
         super(key: key);
 
   @override
-  State createState() => _FluidNavBarState();
+  State createState() => FluidNavBarState();
 
   static Widget _identityBuilder(FluidNavBarIcon icon, FluidNavBarItem item) => item;
 }
 
-class _FluidNavBarState extends State<FluidNavBar>
+class FluidNavBarState extends State<FluidNavBar>
     with TickerProviderStateMixin {
-  int _currentIndex = 0;
+  int _currentIndex;
 
   AnimationController _xController;
   AnimationController _yController;
@@ -82,6 +86,7 @@ class _FluidNavBarState extends State<FluidNavBar>
   void initState() {
     super.initState();
 
+    _currentIndex = widget.initialIndex;
     _xController = AnimationController(
         vsync: this, animationBehavior: AnimationBehavior.preserve);
     _yController = AnimationController(
@@ -144,6 +149,10 @@ class _FluidNavBarState extends State<FluidNavBar>
     );
   }
 
+  void goToItem(int index){
+    _handleTap(index);
+  }
+
   Widget _buildBackground() {
     return CustomPaint(
       painter: _BackgroundCurvePainter(
@@ -167,21 +176,21 @@ class _FluidNavBarState extends State<FluidNavBar>
         .entries
         .map((entry) =>
         widget.itemBuilder(entry.value, FluidNavBarItem(
-          entry.value.iconPath,
-          _currentIndex == entry.key,
-              () => _handleTap(entry.key),
-          entry.value.selectedForegroundColor ??
+          iconPath: entry.value.iconPath,
+          selected: _currentIndex == entry.key,
+          onTap: () => _handleTap(entry.key),
+          selectedForegroundColor: entry.value.selectedForegroundColor ??
               widget?.style?.iconSelectedForegroundColor ??
               Colors.black,
-          entry.value.unselectedForegroundColor ??
+          unselectedForegroundColor: entry.value.unselectedForegroundColor ??
               widget?.style?.iconUnselectedForegroundColor ??
               Colors.grey,
-          entry.value.backgroundColor ??
+          backgroundColor: entry.value.backgroundColor ??
               widget?.style?.iconBackgroundColor ??
               widget?.style?.barBackgroundColor ??
               Colors.white,
-          widget.scaleFactor,
-          widget.animationFactor,
+          scaleFactor: widget.scaleFactor,
+          animationFactor: widget.animationFactor,
         ),),)
         .toList();
   }
@@ -225,16 +234,16 @@ class _FluidNavBarState extends State<FluidNavBar>
             .of(context)
             .size
             .width,
-        duration: Duration(milliseconds: 620) * widget.animationFactor);
+        duration: Duration(milliseconds: 470) * widget.animationFactor);
     Future.delayed(
-      Duration(milliseconds: 500) * widget.animationFactor,
+      Duration(milliseconds: 350) * widget.animationFactor,
           () {
         _yController.animateTo(1.0,
-            duration: Duration(milliseconds: 1200) * widget.animationFactor);
+            duration: Duration(milliseconds: 800) * widget.animationFactor);
       },
     );
     _yController.animateTo(0.0,
-        duration: Duration(milliseconds: 300) * widget.animationFactor);
+        duration: Duration(milliseconds: 150) * widget.animationFactor);
 
     if (widget.onChange != null) {
       widget.onChange(index);

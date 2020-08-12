@@ -45,16 +45,16 @@ class FluidNavBarItem extends StatefulWidget {
   /// The delay factor of the animations ( < 1 is faster, > 1 is slower)
   final double animationFactor;
 
-  FluidNavBarItem(
-    this.iconPath,
-    this.selected,
-    this.onTap,
-    this.selectedForegroundColor,
-    this.unselectedForegroundColor,
-    this.backgroundColor,
-    this.scaleFactor,
-    this.animationFactor,
-  ) : assert(scaleFactor >= 1.0);
+  FluidNavBarItem({
+    @required this.iconPath,
+    @required this.selected,
+    @required this.onTap,
+    @required this.selectedForegroundColor,
+    @required this.unselectedForegroundColor,
+    @required this.backgroundColor,
+    @required this.scaleFactor,
+    @required this.animationFactor,
+  }) : assert(scaleFactor >= 1.0);
 
   @override
   State createState() {
