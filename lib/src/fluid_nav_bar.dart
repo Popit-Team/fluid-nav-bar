@@ -77,8 +77,7 @@ class FluidNavBar extends StatefulWidget {
   static Widget _identityBuilder(FluidNavBarIcon icon, FluidNavBarItem item) => item;
 }
 
-class FluidNavBarState extends State<FluidNavBar>
-    with TickerProviderStateMixin {
+class FluidNavBarState extends State<FluidNavBar> with TickerProviderStateMixin {
   int _currentIndex = 0;
 
   late final AnimationController _xController;
@@ -90,10 +89,8 @@ class FluidNavBarState extends State<FluidNavBar>
 
     _currentIndex = widget.defaultIndex;
 
-    _xController = AnimationController(
-        vsync: this, animationBehavior: AnimationBehavior.preserve);
-    _yController = AnimationController(
-        vsync: this, animationBehavior: AnimationBehavior.preserve);
+    _xController = AnimationController(vsync: this, animationBehavior: AnimationBehavior.preserve);
+    _yController = AnimationController(vsync: this, animationBehavior: AnimationBehavior.preserve);
 
     Listenable.merge([_xController, _yController]).addListener(() {
       setState(() {});
@@ -144,7 +141,7 @@ class FluidNavBarState extends State<FluidNavBar>
     );
   }
 
-  void goToItem(int index){
+  void goToItem(int index) {
     _handleTap(index);
   }
 
@@ -169,7 +166,7 @@ class FluidNavBarState extends State<FluidNavBar>
           (entry) => widget.itemBuilder(
             entry.value,
             FluidNavBarItem(
-              entry.value.svgPath ?? entry.value.svgPath,
+              entry.value.svgPath,
               entry.value.icon,
               _currentIndex == entry.key,
               () => _handleTap(entry.key),
@@ -217,13 +214,11 @@ class FluidNavBarState extends State<FluidNavBar>
         duration: Duration(milliseconds: 470) * widget.animationFactor);
     Future.delayed(
       Duration(milliseconds: 350) * widget.animationFactor,
-          () {
-        _yController.animateTo(1.0,
-            duration: Duration(milliseconds: 800) * widget.animationFactor);
+      () {
+        _yController.animateTo(1.0, duration: Duration(milliseconds: 800) * widget.animationFactor);
       },
     );
-    _yController.animateTo(0.0,
-        duration: Duration(milliseconds: 150) * widget.animationFactor);
+    _yController.animateTo(0.0, duration: Duration(milliseconds: 150) * widget.animationFactor);
 
     if (widget.onChange != null) {
       widget.onChange!(index);
